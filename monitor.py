@@ -15,7 +15,6 @@ def get_repo_file_changes(file_name, token):
 
     with open(file_name, 'r') as f:
         repos = f.readlines()
-
     for repo in repos:
         owner, name = repo.strip().split('/')
         url = f"https://api.github.com/repos/{owner}/{name}/branches"
