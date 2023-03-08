@@ -1,0 +1,45 @@
+name: Github Monitor Check repo changes
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # 每天 UTC 时间 0:00 执行一次
+  # workflow_dispatch:
+
+jobs:
+  github_monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9' # 记得修改 python 版本
+      - name: Install Dependency
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+      
+      - name: Check Repo Changes
+        env:
+          TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        run: python monitor.py 
+
+          
+        # run: |
+        #   python main.py
+
+      # - name: Run Script
+      #   env:
+      #     TEXT: ${{ steps.check_changes.outputs.text }}
+      #     SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+      #     EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+      #     EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      #     EMAIL_TO: ${{ secrets.EMAIL_TO }}
+      #   if: ${{ steps.check_changes.outputs.email_needed == 'True' }}
+      #   run: |
+      #     echo "$TEXT" | mailx -v -r $EMAIL_FROM -s "Github project file changes" -S smtp=$SMTP_SERVER -S smtp-use-starttls -S smtp-auth=login -S smtp-auth-user=$EMAIL_FROM -S smtp-auth-password=$EMAIL_PASSWORD $EMAIL_TO
