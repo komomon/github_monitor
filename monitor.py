@@ -75,7 +75,7 @@ if __name__ == '__main__':
     # from_addr = '{{ secrets.from_addr }}'
     # password = '{{ secrets.password }}'
     # to_addr = '{{ secrets.to_addr }}'
-    token = '{{ secrets.GITHUB_TOKEN }}'
+    token = os.getenv('GITHUB_TOKEN')
     smtp_server = os.getenv('SMTP_SERVER')
     smtp_port = os.getenv('SMTP_PORT')
     from_addr = os.getenv('FROM_ADDR')
