@@ -3,7 +3,10 @@ name: Github Monitor Check repo changes
 on:
   schedule:
     - cron: '0 12 * * *'  # 每天 UTC 时间 0:00 执行一次
-  workflow_dispatch:
+   workflow_dispatch:
+
+env:
+  TZ: Asia/Shanghai
 
 jobs:
   github_monitor:
@@ -30,7 +33,10 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.PASSWORD }}
           TO_ADDR: ${{ secrets.TO_ADDR }}
 
-        run: python monitor.py 
+        run: |
+          python monitor.py
+          echo "The timezone is $TZ"
+          date
 
           
         # run: |
