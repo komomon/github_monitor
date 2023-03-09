@@ -83,7 +83,7 @@ if __name__ == '__main__':
     to_addr = os.getenv('TO_ADDR')
 
 
-
+    print(smtp_server,from_addr,to_addr)
     file_changes = get_repo_file_changes(file_name, token)
     # print(file_changes)
     text = ''
