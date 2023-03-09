@@ -20,13 +20,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install requests
-      
+
       - name: Check Repo Changes
         env:
-          TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          EMAIL_USER: ${{ secrets.EMAIL_USER }}
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          FROM_ADDR: ${{ secrets.FROM_ADDR }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+          EMAIL_PASSWORD: ${{ secrets.PASSWORD }}
+          TO_ADDR: ${{ secrets.TO_ADDR }}
+
         run: python monitor.py 
 
           
