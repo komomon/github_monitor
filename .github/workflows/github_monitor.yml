@@ -2,7 +2,7 @@ name: Github Monitor Check repo changes
 
 on:
   schedule:
-    - cron: '0 1 * * *'  # 每天 UTC 时间 0:00 执行一次
+    - cron: '0 12 * * *'  # 每天 UTC 时间 0:00 执行一次
   # workflow_dispatch:
 
 jobs:
