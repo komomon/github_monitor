@@ -61,6 +61,7 @@ def send_email(subject, to_addr, text, smtp_server, smtp_port, from_addr, passwo
     msg['To'] = to_addr
 
     smtp_server = smtplib.SMTP(smtp_server, int(smtp_port))
+    smtp_server.starttls()
     smtp_server.login(from_addr, password)
     smtp_server.sendmail(from_addr, [to_addr], msg.as_string())
     smtp_server.quit()
@@ -82,8 +83,6 @@ if __name__ == '__main__':
     password = os.getenv('EMAIL_PASSWORD')
     to_addr = os.getenv('TO_ADDR')
 
-
-    print(smtp_server,from_addr,to_addr)
     file_changes = get_repo_file_changes(file_name, token)
     # print(file_changes)
     text = ''
