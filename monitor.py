@@ -60,21 +60,29 @@ def send_email(subject, to_addr, text, smtp_server, smtp_port, from_addr, passwo
     msg['From'] = Header(from_addr)
     msg['To'] = to_addr
 
-    smtp_server = smtplib.SMTP(smtp_server, smtp_port)
+    smtp_server = smtplib.SMTP(smtp_server, int(smtp_port))
     smtp_server.login(from_addr, password)
     smtp_server.sendmail(from_addr, [to_addr], msg.as_string())
     smtp_server.quit()
 
 
 if __name__ == '__main__':
-    token = '{{ secrets.token }}'
     file_name = 'projects.txt'
-    # 修改为您要使用的邮箱地址和SMTP服务器信息，以及您的邮箱密码
-    smtp_server = '{{ secrets.smtp_server }}'
-    smtp_port = int('{{ secrets.smtp_port }}')
-    from_addr = '{{ secrets.from_addr }}'
-    password = '{{ secrets.password }}'
-    to_addr = '{{ secrets.to_addr }}'
+    # token = '{{ secrets.token }}'
+    # # 修改为您要使用的邮箱地址和SMTP服务器信息，以及您的邮箱密码
+    # smtp_server = '{{ secrets.smtp_server }}'
+    # smtp_port = '{{ secrets.smtp_port }}'
+    # from_addr = '{{ secrets.from_addr }}'
+    # password = '{{ secrets.password }}'
+    # to_addr = '{{ secrets.to_addr }}'
+    token = '{{ secrets.GITHUB_TOKEN }}'
+    smtp_server = os.getenv('SMTP_SERVER')
+    smtp_port = os.getenv('SMTP_PORT')
+    from_addr = os.getenv('FROM_ADDR')
+    password = os.getenv('EMAIL_PASSWORD')
+    to_addr = os.getenv('TO_ADDR')
+
+
 
     file_changes = get_repo_file_changes(file_name, token)
     # print(file_changes)
