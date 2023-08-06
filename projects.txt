@@ -10,3 +10,8 @@ hktalent/TOP
 ybdt/evasion-hub
 UltimateSec/ultimaste-nuclei-templates
 coffeehb/Some-PoC-oR-ExP
+#MzzdToT/HAC_Bored_Writing
+gobysec/GobyVuls
+#20142995/pocsuite
+#20142995/sectool
+20142995/pocsuite3
