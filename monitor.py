@@ -16,38 +16,39 @@ def get_repo_file_changes(file_name, token):
     with open(file_name, 'r') as f:
         repos = f.readlines()
     for repo in repos:
-        owner, name = repo.strip().split('/')
-        url = f"https://api.github.com/repos/{owner}/{name}/branches"
-        headers = {'Authorization': f'token {token}'}
-        r = requests.get(url, headers=headers)
-        branches_data = r.json()
-
-        for branch_data in branches_data:
-            branch_name = branch_data['name']
-            last_commit_url = f"https://api.github.com/repos/{owner}/{name}/branches/{branch_name}"
-            r = requests.get(last_commit_url, headers=headers)
-            last_commit = r.json()['commit']
-
-            # 修改这里获取时间戳的方式
-            last_commit_time_str = last_commit['commit']['committer']['date']
-            last_commit_time = datetime.datetime.strptime(last_commit_time_str, '%Y-%m-%dT%H:%M:%SZ')
-            last_commit_unix_time = int(last_commit_time.timestamp())
-            # print(last_commit_time_str,last_commit_time,last_commit_unix_time)
-            # 2023-03-08T06:15:55Z 2023-03-08 06:15:55 1678227355
-            # 2023-02-02T05:31:34Z 2023-02-02 05:31:34 1675287094
-            if last_commit_unix_time >= yesterday_unix_time:
-                last_commit_sha = last_commit['sha']
-                # https://api.github.com/repos/xx/xx/commits/e06b4b05e19e95dcf845a4e5499711e210ffdb52
-                commit_url = f"https://api.github.com/repos/{owner}/{name}/commits/{last_commit_sha}"
-                r = requests.get(commit_url, headers=headers)
-                commit_data = r.json()
-                file_changes = commit_data['files']
-                # print(file_changes)
-                for file_change in file_changes:
-                    result.setdefault(f"{owner}/{name}/tree/{branch_name}", []).append(
-                        file_change['filename'] + '\t' + file_change['status'])
-                    # 设置字典键和值
-            # print(result)
+        if repo.strip() and repo.startswith('#') is False:
+            owner, name = repo.strip().split('/')
+            url = f"https://api.github.com/repos/{owner}/{name}/branches"
+            headers = {'Authorization': f'token {token}'}
+            r = requests.get(url, headers=headers)
+            branches_data = r.json()
+    
+            for branch_data in branches_data:
+                branch_name = branch_data['name']
+                last_commit_url = f"https://api.github.com/repos/{owner}/{name}/branches/{branch_name}"
+                r = requests.get(last_commit_url, headers=headers)
+                last_commit = r.json()['commit']
+    
+                # 修改这里获取时间戳的方式
+                last_commit_time_str = last_commit['commit']['committer']['date']
+                last_commit_time = datetime.datetime.strptime(last_commit_time_str, '%Y-%m-%dT%H:%M:%SZ')
+                last_commit_unix_time = int(last_commit_time.timestamp())
+                # print(last_commit_time_str,last_commit_time,last_commit_unix_time)
+                # 2023-03-08T06:15:55Z 2023-03-08 06:15:55 1678227355
+                # 2023-02-02T05:31:34Z 2023-02-02 05:31:34 1675287094
+                if last_commit_unix_time >= yesterday_unix_time:
+                    last_commit_sha = last_commit['sha']
+                    # https://api.github.com/repos/xx/xx/commits/e06b4b05e19e95dcf845a4e5499711e210ffdb52
+                    commit_url = f"https://api.github.com/repos/{owner}/{name}/commits/{last_commit_sha}"
+                    r = requests.get(commit_url, headers=headers)
+                    commit_data = r.json()
+                    file_changes = commit_data['files']
+                    # print(file_changes)
+                    for file_change in file_changes:
+                        result.setdefault(f"{owner}/{name}/tree/{branch_name}", []).append(
+                            file_change['filename'] + '\t' + file_change['status'])
+                        # 设置字典键和值
+                # print(result)
     return result
 
 
